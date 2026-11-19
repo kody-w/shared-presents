@@ -1,0 +1,5 @@
+Copyright (c) 2026 RapterBox LLC. All rights reserved unless the owner chooses otherwise.
+
+This repository contains the paper "Thought Contracts", its proof page and its check script.
+It matches the license choice of the earlier parts of the RAPP paper series (Frame Chains,
+Living Holograms). Third-party software loaded at runtime (three.js, MIT) keeps its own license.
