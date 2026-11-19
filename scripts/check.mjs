@@ -28,4 +28,12 @@ const bad = structuredClone(cat); const h = Object.keys(bad).find(x => bad[x].na
 const tr = await C.replayTurn(bad, st, sealed, 3);
 check("tampered agent: the turn is refused", !!tr.refused && /fingerprint/.test(tr.refused));
 check("tampered agent: other turns still replay", (await C.replayTurn(bad, st, sealed, 1)).answer_sha256 === sealed.turns[1].answer_sha256);
+// Data by fingerprint: turn 4 pulls a piece; sealed with data, it replays; a tampered piece refuses that turn only.
+const data = await C.buildData(); const sd = await C.seal(cat, st, T, data);
+const rd = await C.replayAll(cat, st, sd, data);
+check("with data: every turn replays to its seal (7 of 7) and turn 4 records the piece it pulled", rd.every((r, i) => r.answer_sha256 === sd.turns[i].answer_sha256) && sd.turns[4].pulled?.[0]?.name === "late-orders");
+check("the pulled piece reaches the answer", /17 of 412/.test(rd[4].answer));
+const badData = structuredClone(data); const ph = Object.keys(badData)[0]; badData[ph].text += "!";
+const rb = await C.replayAll(cat, st, sd, badData);
+check("tampered piece: turn 4 refused, the other 6 still replay", /piece/.test(rb[4].refused || "") && rb.filter((r, i) => i !== 4 && r.answer_sha256 === sd.turns[i].answer_sha256).length === 6);
 console.log(`RESULT ${pass} of ${total}`); process.exit(pass === total ? 0 : 1);

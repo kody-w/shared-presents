@@ -151,22 +151,27 @@ footer { margin-top: 64px; border-top: 1px solid var(--rule); padding-top: 18px;
 <p>A group conversation is one transcript in which each turn names a speaker and that speaker's stack. Before a speaker answers, its stack is loaded; when the next speaker's turn comes, that set is unloaded and the next one loaded. Every speaker reads the whole transcript as its present, and answers with only its own abilities. No new runtime is needed: one Brainstem and one file carry the whole group, and each turn records who spoke with which agents.</p>
 <p>In Thought Contracts' terms, the transcript is the shared structure that writers and readers meet in. Several holograms share it, and none calls another.</p>
 
-<h3>2.7 One file when it must travel</h3>
+<h3>2.7 The record names its data too</h3>
+<p>Abilities are half of a present. The other half is what the caller is shown. Large material (tables, full call quotes, long lists) is kept beside the transcript by fingerprint, as agents are, and never pasted into it. Each turn names the pieces it pulls back, so the next caller sees exactly what that turn pulled and nothing else; a piece no turn names is absent. A pulled piece whose bytes no longer match its fingerprint refuses that turn whole, exactly as a changed agent does. With both halves named, replaying a turn gives the caller the same tools and the same facts, and the transcript stays small because both ride by reference. This is Living Holograms' data sloshing, with the carried material addressed rather than retold.</p>
+
+<h3>2.8 One file when it must travel</h3>
 <p>A stack can optionally be exported as a single ordinary agent file, in the shape of the factory agents already published in RAR <a href="#ref-6">[6]</a>. It carries its members with their fingerprints and, when asked to install, checks each one before writing it beside itself; if a different file of the same name is already there, it keeps the owner's file and says so. The single agent file remains the one unit everything ships as.</p>
 
 <h2>3&nbsp;·&nbsp;Reduction to practice</h2>
-<p><b>The proof.</b> <a href="play/replay.html">One self-contained page</a> holds a seven-turn conversation between a person and three AI speakers, five agent versions and five stacks, with real SHA-256 from the browser. Seal records each turn's agents and answer hash. Replay compares. Upgrade, fork and tamper show what each does. A dependency-free Node check, <code>node scripts/check.mjs</code>, runs the same core and passed 11 of 11 on 2026-11-19:</p>
+<p><b>The proof.</b> <a href="play/replay.html">One self-contained page</a> holds a seven-turn conversation between a person and three AI speakers, five agent versions and five stacks, with real SHA-256 from the browser. Seal records each turn's agents and answer hash. Replay compares. Upgrade, fork and tamper show what each does. A dependency-free Node check, <code>node scripts/check.mjs</code>, runs the same core and passed 14 of 14 on 2026-11-19:</p>
 <ul>
 <li>every turn replays to its sealed answer, 7 of 7;</li>
 <li>each turn loads exactly the agents it names, routed by the last four turns;</li>
 <li>the speaker on turn 4 holds only its own agent, and the agents of turns 0 to 3 are gone;</li>
 <li>an upgrade changes the answer for a new conversation, while the old one, replayed with what it named, is unchanged;</li>
 <li>a fork at turn 3 keeps turns 0 to 3 byte-identical and names its parent;</li>
-<li>one byte added to one agent refuses every turn that names it, and leaves the other turns replaying.</li>
+<li>one byte added to one agent refuses every turn that names it, and leaves the other turns replaying;</li>
+<li>a turn that pulls a data piece by fingerprint replays with it, and one character added to that piece refuses that turn only, while the other 6 replay. Removing the piece check turns this red.</li>
 </ul>
 <p>Driven headlessly at phone width, the page gave 7 of 7 on replay, refused the 3 turns that name the tampered agent, and showed no errors.</p>
 <p><b>On a live estate.</b> On the author's laptop, a local catalog holds 155 agent identities with every version by fingerprint. Saved chat files with the agents field load the agents they name and unload the rest; three of three saved chats loaded their named sets after the catalog was re-keyed. A stack tree, routes (five of five test sentences), and the single-file export (four of four members byte-identical to the catalog) each ran once.</p>
-<p><b>What does not exist yet.</b> Each chat does not yet have its own folder, so two conversations on one runtime at the same moment can still disturb each other. Replay against a live model is not byte-identical, because the model is not; what replays exactly is which abilities it had. The group conversation runs in the proof, not yet on the live estate. Other machines do not yet pull from the catalog by fingerprint.</p>
+<p><b>Per-chat folders and a live group conversation (added later on 2026-11-19).</b> On the author's own runtime, each conversation now loads into its own folder; three conversations asked at the same moment each listed only their own agents (3 of 3). A live group conversation with a person and three AI speakers ran once: each speaker loaded only its own stack, two called their own tools, and the third, which held only a browser agent, said it could not check disk space (3 of 3).</p>
+<p><b>What does not exist yet.</b> Replay against a live model is not byte-identical, because the model is not; what replays exactly is which abilities and data it had. Data pieces by fingerprint run in the proof, not yet on the live estate. Other machines do not yet pull from the catalog by fingerprint.</p>
 
 <h2>4&nbsp;·&nbsp;Related work</h2>
 <p>Each part has an ancestor. Content-addressed storage with immutable history is Git's; whole-system pinning and rollback by hash is Nix's <a href="#ref-7">[7]</a>; replay of state from a log is event sourcing <a href="#ref-8">[8]</a>. Routing tables pick handlers by fixed rules, as request routers and Unix shells do. Package lockfiles record exact versions so a build repeats. Blackboard and tuple-space systems let independent agents share one structure without calling each other <a href="#ref-9">[9]</a>. The Model Context Protocol <a href="#ref-10">[10]</a> lets a tool list change during a session; here the list is a property of the record instead. We claim only the combination: a conversation whose turns name fingerprinted abilities, resolved by static routes, so that it replays, forks, travels and is shared.</p>
@@ -176,7 +181,7 @@ footer { margin-top: 64px; border-top: 1px solid var(--rule); padding-top: 18px;
 <li><b>Abilities replay; answers from a model do not.</b> The proof's agents are pure, so their answers replay byte for byte. A live model given the same abilities may still answer differently.</li>
 <li><b>Fingerprints prove sameness, not safety.</b> A pinned agent can be pinned and harmful. Where agents come from still needs a trust rule.</li>
 <li><b>Routes match words.</b> Whole-word matching misses other forms of a word; the proof uses plain words only.</li>
-<li><b>One folder per runtime today.</b> Until each conversation gets its own folder, simultaneous conversations on one runtime are not isolated.</li>
+<li><b>Isolation is per folder, inside one process.</b> Conversations get separate folders, but their agents still run in one runtime process with its permissions.</li>
 <li><b>Identity by name and tool name.</b> Two unrelated files with the same name and the same tool name would be treated as versions of one agent.</li>
 <li><b>One estate, one author, runs counted once.</b> The live results above were each run once on one laptop.</li>
 </ul>

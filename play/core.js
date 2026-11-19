@@ -18,7 +18,7 @@ export const SOURCES = {
   "disk_care_agent.py@2": "return 'Disk: 32 GB free on ' + (text.match(/mini-\\w+/)||['this Mac'])[0] + '; 4 GB of caches can go to the Trash.'",
   "fleet_agent.py@1":     "return 'Fleet: handed to mini-b, which has a browser.'",
   "browser_agent.py@1":   "return 'Browser: opened ' + (text.match(/[a-z]+\\.(com|org)/)||['the page'])[0] + '.'",
-  "memory_agent.py@1":    "return 'Memory: saved \"' + text.slice(0, 40) + '\".'",
+  "memory_agent.py@1":    "return 'Memory: saved \"' + text.slice(0, 80) + '\".'",
 };
 export async function buildCatalog(sources = SOURCES) {
   const cat = {};
@@ -55,21 +55,35 @@ export async function load(cat, refs) {
   }
   return { ok: true, loaded };
 }
+// Data pieces ride beside the transcript by fingerprint, like agents: a turn names what it pulls back.
+export const PIECES = { "late-orders": "late orders: 17 of 412", "call-quote": "customer: we need weekly reports" };
+export async function buildData(pieces = PIECES) { const d = {}; for (const [n, t] of Object.entries(pieces)) d[await sha256(t)] = { name: n, text: t }; return d; }
+export async function pullRefs(data, names) { const out = []; for (const n of names || []) { const h = Object.keys(data).find(k => data[k].name === n); out.push({ name: n, sha256: h }); } return out; }
+export async function pull(data, refs) {
+  const got = [];
+  for (const r of refs) { const e = data[r.sha256]; if (!e) return { ok: false, why: "missing piece " + r.name };
+    if (await sha256(e.text) !== r.sha256) return { ok: false, why: "fingerprint mismatch on piece " + r.name }; got.push(e.text); }
+  return { ok: true, got };
+}
 // Replay one turn: the speaker's stack, routed by the last 4 turns, answers with only what loaded.
-export async function replayTurn(cat, st, transcript, k) {
+export async function replayTurn(cat, st, transcript, k, data = null) {
   const t = transcript.turns[k];
+  let facts = "";
+  if (t.pull && data) { const refs = t.pulled || await pullRefs(data, t.pull); const p = await pull(data, refs);
+    if (!p.ok) return { k, speaker: t.speaker, refused: p.why, agents: [] }; facts = " [" + p.got.join("; ") + "]"; }
   const context = transcript.turns.slice(Math.max(0, k - 3), k + 1).map(x => x.said).join(" ");
   const refs = resolve(st, t.stack, context);
   const l = await load(cat, refs);
   if (!l.ok) return { k, speaker: t.speaker, refused: l.why, agents: [] };
-  const answer = l.loaded.map(a => a.fn(t.said)).join(" ");
+  const answer = l.loaded.map(a => a.fn(t.said + facts)).join(" ");
   return { k, speaker: t.speaker, agents: l.loaded.map(a => a.name + "@" + a.sha256.slice(0, 8)), answer, answer_sha256: await sha256(answer) };
 }
-export async function replayAll(cat, st, transcript) { const out = []; for (let k = 0; k < transcript.turns.length; k++) out.push(await replayTurn(cat, st, transcript, k)); return out; }
+export async function replayAll(cat, st, transcript, data = null) { const out = []; for (let k = 0; k < transcript.turns.length; k++) out.push(await replayTurn(cat, st, transcript, k, data)); return out; }
 // Seal: record each turn's agents and answer hash, so a later replay can be compared byte for byte.
-export async function seal(cat, st, transcript) {
-  const r = await replayAll(cat, st, transcript);
-  return { ...transcript, turns: transcript.turns.map((t, i) => ({ ...t, agents: r[i].agents, answer_sha256: r[i].answer_sha256 })) };
+export async function seal(cat, st, transcript, data = null) {
+  const r = await replayAll(cat, st, transcript, data);
+  const turns = []; for (const [i, t] of transcript.turns.entries()) turns.push({ ...t, agents: r[i].agents, answer_sha256: r[i].answer_sha256, ...(t.pull && data ? { pulled: await pullRefs(data, t.pull) } : {}) });
+  return { ...transcript, turns };
 }
 export function fork(transcript, k, parentHash, newTurns) {
   return { genesis: { parent: parentHash, at_turn: k }, turns: transcript.turns.slice(0, k + 1).concat(newTurns) };
@@ -79,7 +93,7 @@ export const TRANSCRIPT = { turns: [
   { speaker: "Care",    stack: "care",   said: "check disk on mini-a" },
   { speaker: "Kody",    stack: "hub",    said: "now open the browser to swift.org" },
   { speaker: "Web",     stack: "web",    said: "open swift.org" },
-  { speaker: "Keeper",  stack: "keeper", said: "remember mini-a was full on Nov 19" },
+  { speaker: "Keeper",  stack: "keeper", said: "remember mini-a was full on Nov 19", pull: ["late-orders"] },
   { speaker: "Kody",    stack: "hub",    said: "thanks, that is all" },
   { speaker: "Care",    stack: "care",   said: "check disk on mini-a again" },
 ] };

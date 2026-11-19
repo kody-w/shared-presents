@@ -14,40 +14,41 @@ ol{padding:0;list-style:none;margin:0}li{border:1px solid var(--rule);border-rad
 .ok{color:var(--ok)}.bad{color:var(--bad)}#status{font-weight:600;margin:8px 0;min-height:1.5em}
 </style></head><body><main>
 <h1>Shared Presents: the proof</h1>
-<p class="lede">One chat, three AI speakers and one person. Each turn names a stack; replaying a turn loads exactly the agents it names, checks every fingerprint with real SHA-256, and answers with only those agents. Nothing leaves this page.</p>
+<p class="lede">One chat, three AI speakers and one person. Each turn names a stack; replaying a turn loads exactly the agents it names, pulls back exactly the data pieces it names, checks every fingerprint with real SHA-256, and answers with only those agents. Nothing leaves this page.</p>
 <div class="bar">
  <label>Replay up to turn <input id="k" type="range" min="0" max="6" value="6"> <b id="kv">6</b></label>
 </div>
 <div class="bar">
  <button id="seal">1. Seal the chat</button><button id="replay">2. Replay and compare</button>
  <button id="upgrade">3. Upgrade Disk Care</button><button id="fork">4. Fork at turn 3</button>
- <button id="tamper">5. Tamper one agent byte</button><button id="reset">Reset</button>
+ <button id="tamper">5. Tamper one agent byte</button><button id="tamperdata">6. Tamper one data piece</button><button id="reset">Reset</button>
 </div>
 <p id="status" role="status" aria-live="polite">Press 1 to seal the chat: each turn records the agents it loaded and the hash of its answer.</p>
 <ol id="turns"></ol>
 <script type="module">
 import * as C from "./core.js";
-let cat, st, sealed = null, view = C.TRANSCRIPT, note = "";
+let cat, st, data, sealed = null, view = C.TRANSCRIPT, note = "";
 const $ = id => document.getElementById(id);
-async function init(){ cat = await C.buildCatalog(); st = await C.stacks(cat); sealed = null; view = C.TRANSCRIPT; await draw(); }
+async function init(){ cat = await C.buildCatalog(); st = await C.stacks(cat); data = await C.buildData(); sealed = null; view = C.TRANSCRIPT; await draw(); }
 async function draw(){
   const k = +$("k").value; $("kv").textContent = k; $("k").max = view.turns.length - 1;
-  const rows = await C.replayAll(cat, st, view);
+  const rows = await C.replayAll(cat, st, view, data);
   $("turns").innerHTML = rows.map((r, i) => {
     const s = sealed && sealed.turns[i] && view.turns[i] === view.turns[i] ? sealed.turns[i] : null;
     const same = s && s.answer_sha256 ? (r.answer_sha256 === s.answer_sha256 ? '<span class="ok"> ✓ same as sealed</span>' : '<span class="bad"> ✗ differs from sealed</span>') : "";
     const t = view.turns[i];
-    return `<li class="${i > k ? "dim" : i === k ? "now" : ""}"><div><span class="who">${t.speaker}</span> <span class="agents">stack ${t.stack}</span>: ${t.said}</div>
+    return `<li class="${i > k ? "dim" : i === k ? "now" : ""}"><div><span class="who">${t.speaker}</span> <span class="agents">stack ${t.stack}</span>: ${t.said}${t.pull ? ' <span class="agents">pulls: ' + t.pull.join(', ') + '</span>' : ''}</div>
       <div class="agents">loaded: ${r.refused ? '<span class="bad">REFUSED, ' + r.refused + '</span>' : (r.agents.join(", ") || "nothing")}</div>
       ${r.refused ? "" : `<div class="ans">${r.answer || "(no agent, no answer)"}${same}</div>`}</li>`; }).join("");
   $("status").textContent = note;
 }
 $("k").oninput = draw;
-$("seal").onclick = async () => { sealed = await C.seal(cat, st, view); note = "Sealed: 7 turns, each with its agents and answer hash."; draw(); };
-$("replay").onclick = async () => { if(!sealed){note="Seal first.";return draw();} const r = await C.replayAll(cat, st, sealed); const n = r.filter((x,i)=>x.answer_sha256===sealed.turns[i].answer_sha256).length; note = `Replayed: ${n} of ${r.length} turns byte-identical to the seal.`; draw(); };
+$("seal").onclick = async () => { sealed = await C.seal(cat, st, view, data); note = "Sealed: 7 turns, each with its agents and answer hash."; draw(); };
+$("replay").onclick = async () => { if(!sealed){note="Seal first.";return draw();} const r = await C.replayAll(cat, st, sealed, data); const n = r.filter((x,i)=>x.answer_sha256===sealed.turns[i].answer_sha256).length; note = `Replayed: ${n} of ${r.length} turns byte-identical to the seal.`; draw(); };
 $("upgrade").onclick = async () => { st = { ...st, care: st["care-v2"] }; note = "Disk Care v2 is now in the care stack. This page resolves stacks by name, so the 4 Disk Care turns now answer differently from the seal: that is what an upgrade does to a chat that did not pin versions. A chat that pins versions replays v1 unchanged (the Node check proves it)."; draw(); };
 $("fork").onclick = async () => { if(!sealed){note="Seal first.";return draw();} const p = await C.sha256(C.canon(sealed)); view = C.fork(sealed, 3, p, [{speaker:"Kody",stack:"hub",said:"check disk space instead"}]); note = `Forked at turn 3; parent ${p.slice(0,12)}. Turns 0 to 3 match the seal; turn 4 is a new branch.`; $("k").value = view.turns.length-1; draw(); };
 $("tamper").onclick = async () => { const h = Object.keys(cat).find(x => cat[x].name === "browser_agent.py"); cat = { ...cat, [h]: { ...cat[h], src: cat[h].src + " " } }; note = "One space added to the Browser agent's source. Turns that name it are refused whole; every other turn still replays."; draw(); };
+$("tamperdata").onclick = async () => { const h = Object.keys(data).find(x => data[x].name === "late-orders"); data = { ...data, [h]: { ...data[h], text: data[h].text + "!" } }; note = "One character added to the late-orders piece that turn 4 pulls back. That turn is refused whole; the other 6 still replay."; draw(); };
 $("reset").onclick = () => { note = "Reset."; init(); };
 init();
 </script></main></body></html>
