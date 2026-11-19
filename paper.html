@@ -157,6 +157,18 @@ footer { margin-top: 64px; border-top: 1px solid var(--rule); padding-top: 18px;
 <h3>2.8 One file when it must travel</h3>
 <p>A stack can optionally be exported as a single ordinary agent file, in the shape of the factory agents already published in RAR <a href="#ref-6">[6]</a>. It carries its members with their fingerprints and, when asked to install, checks each one before writing it beside itself; if a different file of the same name is already there, it keeps the owner's file and says so. The single agent file remains the one unit everything ships as.</p>
 
+<h3>2.9 At scale: any runtime can answer any turn</h3>
+<p>Because a turn's manifest (agent fingerprints, data fingerprints and the transcript) is everything needed to answer it, and the runtime keeps nothing between requests, the pattern scales the way per-request functions, fingerprinted stores and content delivery networks do <a href="#ref-7">[7]</a>. This section is design; it has not yet been run on more than one runtime at once.</p>
+<ul>
+<li><b>Runtimes become interchangeable.</b> No conversation sticks to one machine. Add machines and spread turns over them; if one dies, the next turn goes elsewhere with nothing lost.</li>
+<li><b>Caching is trivial.</b> A fingerprinted file never changes, so every node may keep it forever and never check for updates; the only question is what to evict. The catalog can be a plain static site serving any number of nodes.</li>
+<li><b>Send turns to warm nodes.</b> A turn goes to a node that already holds its stack, so popular stacks stay loaded and rare ones load once.</li>
+<li><b>The catalog can be any size.</b> Each turn pays only for the handful of agents and pieces it names; a million unnamed agents cost nothing.</li>
+<li><b>Upgrades never break running work.</b> A new version is a new fingerprint. Old manifests keep the old one, so a rollout changes what new turns name, and a rollback does the same.</li>
+<li><b>The kernel stays untouched.</b> All of it sits beside the runtime and speaks to it through its ordinary chat endpoint.</li>
+</ul>
+<p>What breaks first is known from those predecessors: the first turn for a stack waits for its files; agents from many conversations share one process and its permissions; a fingerprint proves sameness, not safety; and the model call, not loading, dominates cost.</p>
+
 <h2>3&nbsp;·&nbsp;Reduction to practice</h2>
 <p><b>The proof.</b> <a href="play/replay.html">One self-contained page</a> holds a seven-turn conversation between a person and three AI speakers, five agent versions and five stacks, with real SHA-256 from the browser. Seal records each turn's agents and answer hash. Replay compares. Upgrade, fork and tamper show what each does. A dependency-free Node check, <code>node scripts/check.mjs</code>, runs the same core and passed 14 of 14 on 2026-11-19:</p>
 <ul>
