@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Shared Presents</title>
-<meta name="description" content="RAPP paper, part 4. A saved conversation names, turn by turn, the exact agent files it ran with, so it can be replayed, forked, moved between surfaces and shared by several speakers.">
+<title>Working Sets</title>
+<meta name="description" content="RAPP paper, part 4. A chat remembers its agents: the runtime as an operating system that opens only the programs a saved chat used, closes them after, and checks a replay by what ran.">
 <link rel="canonical" href="https://kody-w.github.io/shared-presents/paper.html">
-<meta property="og:title" content="Shared Presents · RAPP paper, part 4">
-<meta property="og:description" content="One transcript, many holograms, and abilities named by the record.">
+<meta property="og:title" content="Working Sets · RAPP paper, part 4">
+<meta property="og:description" content="A chat remembers its agents.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
 <script>
   (() => {
@@ -86,7 +86,7 @@ footer { margin-top: 64px; border-top: 1px solid var(--rule); padding-top: 18px;
 @media (max-width: 520px) { body { font-size: 17px; } .dek { font-size: 19px; } .summary { font-size: 18px; } }
 @media print { .series { display: none; } .stage canvas, .stage .lbl { display: none; } .stage.live .fallback { display: flex; } figure, .claim { break-inside: avoid; } }
 </style>
-<style>table{border-collapse:collapse;width:100%;font-size:16px}th,td{border-bottom:1px solid var(--rule);padding:6px 8px;text-align:left;vertical-align:top}code{font-family:var(--mono);font-size:.9em}</style>
+<style>code{overflow-wrap:anywhere}td,th{overflow-wrap:anywhere}table{border-collapse:collapse;width:100%;font-size:16px}th,td{border-bottom:1px solid var(--rule);padding:6px 8px;text-align:left;vertical-align:top}code{font-family:var(--mono);font-size:.9em}</style>
 </head>
 <body>
 <main>
@@ -99,107 +99,118 @@ footer { margin-top: 64px; border-top: 1px solid var(--rule); padding-top: 18px;
 </nav>
 <header>
   <p class="kicker">RAPP paper · part 4 · November 2026</p>
-  <h1>Shared Presents</h1>
-  <p class="subtitle">One transcript, many holograms, and abilities named by the record</p>
-  <p class="dek">A saved conversation names, turn by turn, exactly which agent files were loaded. Any surface can load the same file and stand where that conversation stood: replay it, fork it, or let several AI speakers share it, each answering with only its own abilities.</p>
-  <p class="meta">Part 4 of Frame Chains → Living Holograms → Thought Contracts → Shared Presents.</p>
-  <p class="meta">Kody Wildfeuer · RapterBox LLC · First public disclosure: 2026-11-19</p>
+  <h1>Working Sets</h1>
+  <p class="subtitle">A chat remembers its agents</p>
+  <p class="dek">Treat an agent runtime as an operating system. An agent file is a program. A saved chat is the launcher: it opens only the programs that ran in it, and closes them when the job is finished. Run the chat again and compare which programs ran, and you have a check that reading the replies cannot give.</p>
+  <p class="meta">Part 4 of Frame Chains → Living Holograms → Thought Contracts → Working Sets.</p>
+  <p class="meta">Kody Wildfeuer · RapterBox LLC · First public disclosure: 2026-11-19, under the title Shared Presents (<a href="v1/paper.html">that version, as published</a>). Rewritten 2026-11-20 after a day of use.</p>
 </header>
 
-<p class="summary"><b>In one sentence:</b> when each turn of a saved conversation names the exact, fingerprinted agent files it ran with, the conversation itself becomes the hologram's shape at every moment, so it can be replayed byte for byte, forked from any turn, moved between surfaces with nothing changed, and shared by several speakers who load and unload their own abilities as their turn comes.</p>
+<p class="summary"><b>In one sentence:</b> a saved chat already records which agents ran, so loading only those agents, releasing them afterwards, and comparing which agents run on the next pass turns an ordinary transcript into a launcher, a way to keep unneeded tools out of reach, and a check that the same steps ran.</p>
 
 <section class="short">
   <h2>The short version</h2>
   <ul>
-    <li><b>The record names the abilities.</b> Thought Contracts showed that what is in the agents folder is what the hologram can do. Here the conversation decides what is in the folder: each turn carries a list of agent fingerprints, and loading that turn makes the folder hold exactly those files.</li>
-    <li><b>Unloading is free.</b> Anything the next turn does not name is gone for that turn. Presence is ability, and the record now governs presence.</li>
-    <li><b>Stacks.</b> A stack is a named list of exact agent versions plus static routes. Words in the last few turns pick child stacks the same way every time. The same stack and the same words load the same agents.</li>
-    <li><b>Time travel.</b> Because every version is kept by fingerprint, turn 7 of an old conversation can be replayed with the agents of that moment, not today's. A fork from any turn names its parent.</li>
-    <li><b>A shared present.</b> Several speakers in one transcript, each turn naming its speaker's stack: one runtime, one file, and the hotload mechanic is the whole engine. This answers the question Part 3 ended on.</li>
-    <li><b>The agent file stays sacred.</b> A stack may optionally travel as one ordinary agent file that unpacks its members after checking each fingerprint.</li>
+    <li><b>The runtime is an operating system.</b> Agent files are programs, a catalog is the store, a saved chat is the launcher, and what is loaded right now is what is open.</li>
+    <li><b>The transcript is the record.</b> The transcript a runtime already exports says which agents ran on each turn. Nothing has to be added for that to be true.</li>
+    <li><b>Open the working set, nothing more.</b> Replaying a saved chat loads only the agents that ran in it, beside a small everyday set. The everyday set stays small, and apart from that set, tools the job never used are not in reach.</li>
+    <li><b>Check what ran, not what was said.</b> If an agent ran before and does not run now, that step needs a second look: say it once more, then ask the person. In live runs this caught replies that said &ldquo;saved&rdquo; when nothing had been saved.</li>
+    <li><b>A refusal is a signal.</b> &ldquo;I do not have a program open for that&rdquo; means look on the shelf, open what fits, do the job, close it.</li>
+    <li><b>Learned, practiced, memorized.</b> A job done once is learned. Replayed with a matching check it is practiced. Pinned to exact versions it is memorized.</li>
   </ul>
 </section>
 
-<h2>1&nbsp;·&nbsp;Where the series left off</h2>
-<p>Frame Chains <a href="#ref-1">[1]</a> made the history of an estate verifiable without trusting a clock. Verified Frame Worlds <a href="#ref-2">[2]</a> made an application's visible state a replay of its record, with forks that name their parent frame. Living Holograms <a href="#ref-3">[3]</a> made that history steerable through lenses: agent files whose identity is the hash of their source, so editing one description makes a new lens. Thought Contracts <a href="#ref-4">[4]</a> showed that a hologram's abilities are plain files read fresh on every turn: a file arrives and the next turn can do more; a file leaves and the ability goes. It closed with a question: what happens when two holograms share one present?</p>
-<p>Two gaps remained in practice. First, which files were present at a given turn was a fact about one machine's folder, not about the conversation. Move the conversation to another machine, or come back next month, and the folder holds something else. Second, a hologram with thousands of possible abilities cannot show them all to a model at once, and choosing a subset by hand does not repeat.</p>
-<p>This paper closes both with one move: the conversation names its abilities.</p>
+<h2>1&nbsp;·&nbsp;Where the series left off, and what a day of use removed</h2>
+<p>Thought Contracts <a href="#ref-4">[4]</a> showed that an agent runtime's abilities are plain files read fresh on every turn: a file arrives and the next turn can do more; a file leaves and the ability goes. The first version of this part, published a day earlier, built a great deal on that: named stacks of agents, word routes between them, an agent list on every turn, a folder per conversation, data pieces by fingerprint, several speakers sharing one transcript. Each piece worked when tried once.</p>
+<p>In use, almost all of it was more than the job needed. Routing by words was a second thing to keep right. A list on every turn duplicated what the transcript already said. What survived a day of real work is one idea small enough to say aloud: <b>a chat remembers its agents</b>. This rewrite is about that idea, what it turns the runtime into, and what we measured when we leaned on it.</p>
 
 <h2>2&nbsp;·&nbsp;Design</h2>
-<h3>2.1 Three words</h3>
-<p>The design uses three nouns, each mapped to one that already exists in RAPP:</p>
+<p>Four words are used throughout. The <b>model</b> is the language model that reads a request and decides what to do. The <b>runtime</b> is the small local program that passes requests to the model and runs what it chooses. An <b>agent file</b> is one file that gives the runtime one ability, with a plain description of when to use it. A <b>tool</b> is ordinary software already on the machine that an agent file may drive.</p>
+
+<h3>2.1 The runtime as an operating system</h3>
+<p>Once agents load and unload between turns, a runtime behaves like a small operating system driven entirely through chat. The mapping is direct, and each row is something an operating system already taught:</p>
 <table>
-<tr><th>Word</th><th>What it is</th></tr>
-<tr><td>Agent</td><td>One <code>agent.py</code> file: one tool, a description, described parameters and a <code>perform()</code>. Its identity is its file name plus the tool name it registers; each version is kept by its SHA-256.</td></tr>
-<tr><td>Stack</td><td>A named folder of references, never copies: exact agent versions by fingerprint, child stacks, and static routes. It has a stable identifier.</td></tr>
-<tr><td>Skill</td><td>A <code>skill.md</code> page an AI reads and carries out, which names the stack it needs. An agent file is never called a skill.</td></tr>
+<tr><th>In an operating system</th><th>Here</th></tr>
+<tr><td>A program</td><td>One agent file: one tool, a description, described inputs.</td></tr>
+<tr><td>Open programs</td><td>The agent files loaded right now. The model can reach these and nothing else.</td></tr>
+<tr><td>Opening and closing a program</td><td>Loading agent files before a job and releasing them after it.</td></tr>
+<tr><td>A shortcut that launches a program</td><td>A saved chat. It names, by having used them, the programs a job needs.</td></tr>
+<tr><td>A software store</td><td>A public catalog of agent files, each version kept by fingerprint <a href="#ref-6">[6]</a>.</td></tr>
+<tr><td>&ldquo;No application can open this file&rdquo;</td><td>&ldquo;I do not have a program open for that.&rdquo;</td></tr>
 </table>
+<p>The runtime itself is not changed for this. Loading and releasing are done by one ordinary agent file that sits in the everyday set, so the operating system is built from the same unit it runs.</p>
 
-<h3>2.2 A catalog by fingerprint</h3>
-<p>Every agent version an estate has ever run is kept once, under its fingerprint, in a local catalog. Nothing is overwritten; a new version is a new entry beside the old one. This is the rule Git applies to file contents and Nix to packages: you cannot replay yesterday with today's code.</p>
+<h3>2.2 A chat remembers its agents</h3>
+<p>The chat file a runtime exports holds, for each turn, what was asked, what was answered, and which agents ran. That last part is usually treated as a log. Here it is the record that matters: it is a list, written by the work itself, of the programs this job used on that occasion. It is one path through the job, not every path the job could take, and it records only what ran as an agent, not everything the runtime did. Within those limits no one has to declare the job's needs in advance: doing the job once writes the list.</p>
 
-<h3>2.3 The record names the folder</h3>
-<p>The chat file that the Brainstem already exports gains one field per turn: the list of agent fingerprints that turn ran with, and the stack it came from. Loading a turn means: resolve the stack, fetch each named file from the catalog, re-hash it, and make the folder hold exactly those files. If any file is missing or its hash differs, the turn is refused whole. A turn is never half-loaded. An older chat file without the field loads as it always did.</p>
+<h3>2.3 The working set</h3>
+<p>Denning's working set <a href="#ref-7">[7]</a> is the set of pages a process has used recently, and the rule that follows: keep in memory what the process is using, and no more. The working set of a saved chat is the set of agents that ran in it. To run that job again, the runtime opens that set beside its small everyday set, does the job, and closes what it opened; the everyday set stays. An agent that was installed but never ran in the chat is not opened.</p>
+<p>Two things follow. The everyday set stays small, so every ordinary turn carries less. And the model's choices during the job narrow: it still decides whether to call a program, which of the open ones, and in what order, but it cannot reach for a look-alike that is not open. A look-alike kept in the everyday set is still in reach, which is one more reason to keep that set small. This is in the spirit of least privilege <a href="#ref-8">[8]</a>, with the history standing in for a written list. It limits what the model is offered. It is not a security boundary: a loaded program can still do whatever its file does.</p>
 
-<h3>2.4 Static routes</h3>
-<p>A stack may carry routes: a list of words and the child stack each one selects. The words of the last four turns, lowercased and split into whole words, are matched against them. The rule is deterministic, so the same stack and the same conversation choose the same agents on every machine. One stack identifier can therefore take many shapes, chosen by what is being talked about, while every shape remains reproducible. The model sees only the handful of agents a turn routes to, never the whole catalog.</p>
-
-<h3>2.5 Time travel and forks</h3>
-<p>Replaying turn <i>k</i> loads what turn <i>k</i> named. An upgrade to an agent changes the answers of new conversations and leaves pinned old ones untouched. A fork copies turns 0 to <i>k</i>, records the parent conversation's hash and the turn it left from, and continues; its shared prefix replays byte for byte. This is Verified Frame Worlds' prefix rule applied to abilities rather than to board state.</p>
-
-<h3>2.6 A shared present</h3>
-<p>A group conversation is one transcript in which each turn names a speaker and that speaker's stack. Before a speaker answers, its stack is loaded; when the next speaker's turn comes, that set is unloaded and the next one loaded. Every speaker reads the whole transcript as its present, and answers with only its own abilities. No new runtime is needed: one Brainstem and one file carry the whole group, and each turn records who spoke with which agents.</p>
-<p>In Thought Contracts' terms, the transcript is the shared structure that writers and readers meet in. Several holograms share it, and none calls another.</p>
-
-<h3>2.7 The record names its data too</h3>
-<p>Abilities are half of a present. The other half is what the caller is shown. Large material (tables, full call quotes, long lists) is kept beside the transcript by fingerprint, as agents are, and never pasted into it. Each turn names the pieces it pulls back, so the next caller sees exactly what that turn pulled and nothing else; a piece no turn names is absent. A pulled piece whose bytes no longer match its fingerprint refuses that turn whole, exactly as a changed agent does. With both halves named, replaying a turn gives the caller the same tools and the same facts, and the transcript stays small because both ride by reference. This is Living Holograms' data sloshing, with the carried material addressed rather than retold.</p>
-
-<h3>2.8 One file when it must travel</h3>
-<p>A stack can optionally be exported as a single ordinary agent file, in the shape of the factory agents already published in RAR <a href="#ref-6">[6]</a>. It carries its members with their fingerprints and, when asked to install, checks each one before writing it beside itself; if a different file of the same name is already there, it keeps the owner's file and says so. The single agent file remains the one unit everything ships as.</p>
-
-<h3>2.9 At scale: any runtime can answer any turn</h3>
-<p>Because a turn's manifest (agent fingerprints, data fingerprints and the transcript) is everything needed to answer it, and the runtime keeps nothing between requests, the pattern scales the way per-request functions, fingerprinted stores and content delivery networks do <a href="#ref-7">[7]</a>. This section is design; it has not yet been run on more than one runtime at once.</p>
+<h3>2.4 The check: what ran, not what was said</h3>
+<p>Run a saved chat again and there are two transcripts: the one that was saved and the new one. Comparing their wording is unreliable, because a model rarely says the same thing twice. Comparing which agents ran, step by step, is exact. There are three outcomes:</p>
 <ul>
-<li><b>Runtimes become interchangeable.</b> No conversation sticks to one machine. Add machines and spread turns over them; if one dies, the next turn goes elsewhere with nothing lost.</li>
-<li><b>Caching is trivial.</b> A fingerprinted file never changes, so every node may keep it forever and never check for updates; the only question is what to evict. The catalog can be a plain static site serving any number of nodes.</li>
-<li><b>Send turns to warm nodes.</b> A turn goes to a node that already holds its stack, so popular stacks stay loaded and rare ones load once.</li>
-<li><b>The catalog can be any size.</b> Each turn pays only for the handful of agents and pieces it names; a million unnamed agents cost nothing.</li>
-<li><b>Upgrades never break running work.</b> A new version is a new fingerprint. Old manifests keep the old one, so a rollout changes what new turns name, and a rollback does the same.</li>
-<li><b>The kernel stays untouched.</b> All of it sits beside the runtime and speaks to it through its ordinary chat endpoint.</li>
+  <li><b>The same agents ran at each step.</b> The run followed the recorded path. That is all this outcome says: it is not proof that the results are right, and a job done correctly by a different route would not match.</li>
+  <li><b>An agent ran before and did not run now.</b> Either something the job needs is missing, or the model simply did not call it this time. The two look the same, so the move is to say the request once more and, if the step still does not run, to ask the person a question that names it.</li>
+  <li><b>A different agent ran, or the steps came in another order.</b> The job went somewhere else and the result should not be trusted until that step is looked at.</li>
 </ul>
-<p>What breaks first is known from those predecessors: the first turn for a stack waits for its files; agents from many conversations share one process and its permissions; a fingerprint proves sameness, not safety; and the model call, not loading, dominates cost.</p>
+<p>This borrows from recording a run and checking later runs against it <a href="#ref-9">[9]</a>, pointed at tool use. Its value is highest exactly where reading the reply fails: a model that says it did the thing when it did not.</p>
+
+<h3>2.5 A refusal is a signal</h3>
+<p>With a small everyday set, the runtime will often be asked for something it has no program open for. That is the system working. The answer &ldquo;I do not have that open&rdquo; is the cue to look at what can be opened, open the one that fits, do the job and close it. If nothing fits, either the saved chat describes its job too narrowly or the program does not exist yet. Both are fixed where they are found, and neither needs a routing table.</p>
+
+<h3>2.6 Learned, practiced, memorized</h3>
+<p>The same record gives a job three stages, each one a thing that already exists rather than a new mechanism:</p>
+<table>
+<tr><th>Stage</th><th>What has happened</th></tr>
+<tr><td>Learned</td><td>The job was done once by chat, and the chat was saved with the agents that ran.</td></tr>
+<tr><td>Practiced</td><td>The saved chat was run again and the check matched.</td></tr>
+<tr><td>Memorized</td><td>The saved chat is pinned to the exact versions that ran, and any step that was done by hand is locked into an agent file that carries its own proof.</td></tr>
+</table>
+<p>A person strengthens a job by repeating it under a check, the way a skill moves from attention to habit. Each stage leaves evidence in a file anyone can open. Whether a runtime becomes measurably more reliable this way over weeks is something we have not yet measured.</p>
+
+<h3>2.7 The store</h3>
+<p>If a saved chat names an agent the machine does not have, the runtime fetches it from a catalog and loads it. Each version is kept under a fingerprint computed from its contents, and a fetched file is checked against that fingerprint before it is allowed to run. The principle, that a name should fix exactly what you get, is the one Nix applies to whole software installations <a href="#ref-10">[10]</a>. By design this makes a saved chat portable, provided the catalog holds the agents and the machine already has the tools they drive: another machine can acquire what the job needs on first use. This section is design; it was not exercised in the runs below.</p>
+
+<h3>2.8 Outside tools as programs</h3>
+<p>A local tool becomes a program by being wrapped in one agent file with five habits: it takes plain inputs only; it drives a tool already on the device and says so plainly when that tool is missing; it never overwrites, so its result is a new file beside the source; it measures its own result before saying it is finished; and it returns a receipt of what was asked, what was made and what was measured.</p>
+
+<h3>2.9 Who drives</h3>
+<p>The whole arrangement is driven through chat, and it stacks. A person asks an assistant; the assistant asks the runtime; the runtime opens the programs the job needs; each hop passes plain words and plain inputs. When one runtime is not enough separation, several can run side by side, each with its own open programs, like separate computers for separate duties. That last arrangement is design; we have not run it.</p>
 
 <h2>3&nbsp;·&nbsp;Reduction to practice</h2>
-<p><b>The proof.</b> <a href="play/replay.html">One self-contained page</a> holds a seven-turn conversation between a person and three AI speakers, five agent versions and five stacks, with real SHA-256 from the browser. Seal records each turn's agents and answer hash. Replay compares. Upgrade, fork and tamper show what each does. A dependency-free Node check, <code>node scripts/check.mjs</code>, runs the same core and passed 14 of 14 on 2026-11-19:</p>
+<p><b>The proof.</b> <a href="play/replay.html">One page and one small script</a>, with no other dependencies, hold a shelf of six programs, two of them look-alikes, and a three-line job saved with the three programs it used. The reader can open only the working set, open everything, leave a detail out, make a reply claim work that did not happen, or open nothing, and watch the check. A dependency-free Node check, <code>node scripts/check.mjs</code>, runs the same engine and passed 22 of 22 on 2026-11-20, including one runtime that opens a working set beside an everyday set, does the job, closes it and is asked again. Making the comparison ignore the order of steps turns 2 of the 22 red; making it always agree turns 6 red. The chooser in the proof is a fixed stand-in for a model, so the proof repeats exactly; it shows the logic, not model behaviour.</p>
+<p><b>Live runs.</b> On the author's laptop, 2026-11-20, a real runtime with a small language model choosing the agents:</p>
 <ul>
-<li>every turn replays to its sealed answer, 7 of 7;</li>
-<li>each turn loads exactly the agents it names, routed by the last four turns;</li>
-<li>the speaker on turn 4 holds only its own agent, and the agents of turns 0 to 3 are gone;</li>
-<li>an upgrade changes the answer for a new conversation, while the old one, replayed with what it named, is unchanged;</li>
-<li>a fork at turn 3 keeps turns 0 to 3 byte-identical and names its parent;</li>
-<li>one byte added to one agent refuses every turn that names it, and leaves the other turns replaying;</li>
-<li>a turn that pulls a data piece by fingerprint replays with it, and one character added to that piece refuses that turn only, while the other 6 replay. Removing the piece check turns this red.</li>
+  <li><b>A fact left out.</b> When a request omitted a detail the job needed, the agent did not run in 34 of 34 turns. In those turns the omitted detail always stopped the step. We tested one kind of omission, and the reverse does not hold, as the next line shows.</li>
+  <li><b>False alarms.</b> With the full request and the right agent open, no agent ran in 7 of 48 turns in one scenario and in 13 of 55 replayed lines in a second, run five at a time. Saying the line once more recovered 8 of those 13; 5 of 55 still missed.</li>
+  <li><b>Said, not done.</b> In 7 of those 13 misses the reply claimed the work (&ldquo;saved&rdquo;, &ldquo;noted&rdquo;) with nothing run. The check on what ran caught each one, and in each case a later question about that fact could not be answered.</li>
+  <li><b>Look-alikes.</b> With two similar agents both open, the wrong one was chosen in 7 of 8 turns. With only the saved chat's working set open, across the 55 replayed lines above the first try chose the right agent 42 times, no agent 13 times and a wrong agent 0 times. These are two separate samples with different requests, not a matched comparison, and a look-alike that is not open cannot be chosen by construction; they show the size of the look-alike problem and that it did not appear, not that more jobs completed.</li>
+  <li><b>Open, use, close.</b> Asked in plain words, the runtime listed what it could open, opened one program, did a job with it and closed it, returning to its everyday set each time (11 agents, then 12, then 11, over six such cycles).</li>
+  <li><b>A refusal, cured.</b> Asked for a job with no program named, the runtime first declined, because what it had been told about that program was too narrow. After the saved chat was corrected to describe the program fully, the same request opened the right program and completed, with the program's own measurement passing.</li>
+  <li><b>Long work outlives its launcher.</b> A program that starts a job taking minutes was opened, started the job and was closed; the job finished on its own. Two such jobs each produced a narrated short film in about ten minutes. We inspected eight frames of each and have not yet watched either through.</li>
 </ul>
-<p>Driven headlessly at phone width, the page gave 7 of 7 on replay, refused the 3 turns that name the tampered agent, and showed no errors.</p>
-<p><b>On a live estate.</b> On the author's laptop, a local catalog holds 155 agent identities with every version by fingerprint. Saved chat files with the agents field load the agents they name and unload the rest; three of three saved chats loaded their named sets after the catalog was re-keyed. A stack tree, routes (five of five test sentences), and the single-file export (four of four members byte-identical to the catalog) each ran once.</p>
-<p><b>Per-chat folders and a live group conversation (added later on 2026-11-19).</b> On the author's own runtime, each conversation now loads into its own folder; three conversations asked at the same moment each listed only their own agents (3 of 3). A live group conversation with a person and three AI speakers ran once: each speaker loaded only its own stack, two called their own tools, and the third, which held only a browser agent, said it could not check disk space (3 of 3). In a second live run, one speaker pulled a data piece by fingerprint and answered with a code that existed only in that piece; a speaker that had not pulled it repeated it from the shared transcript; with one byte of the piece changed, the pulling turn was refused (1 of 1 each).</p>
-<p><b>What does not exist yet.</b> Replay against a live model is not byte-identical, because the model is not; what replays exactly is which abilities and data it had. Other machines do not yet pull from the catalog by fingerprint.</p>
+<p><b>What these numbers are.</b> They are counts from our own records of those runs. The records are not published with this paper, so a reader can rerun the proof but cannot yet rerun the live runs.</p>
+<p><b>What does not exist yet.</b> A chat cannot yet save itself as a launcher at the end of a job; that step was done by hand. Fetching from the public catalog on first use is built and was not exercised in these runs. Several runtimes side by side have not been run.</p>
+<p><b>One component is withheld.</b> SHA-256 of its sealed description: <code>1332a46763323de7de15f6fadbf336ef663dfe7b0a88689658094b8fc8557247</code>.</p>
 
 <h2>4&nbsp;·&nbsp;Related work</h2>
-<p>Each part has an ancestor. Content-addressed storage with immutable history is Git's; whole-system pinning and rollback by hash is Nix's <a href="#ref-7">[7]</a>; replay of state from a log is event sourcing <a href="#ref-8">[8]</a>. Routing tables pick handlers by fixed rules, as request routers and Unix shells do. Package lockfiles record exact versions so a build repeats. Blackboard and tuple-space systems let independent agents share one structure without calling each other <a href="#ref-9">[9]</a>. The Model Context Protocol <a href="#ref-10">[10]</a> lets a tool list change during a session; here the list is a property of the record instead. We claim only the combination: a conversation whose turns name fingerprinted abilities, resolved by static routes, so that it replays, forks, travels and is shared.</p>
+<p>Each part has an ancestor, and the names are borrowed on purpose. The working set is Denning's <a href="#ref-7">[7]</a>. Giving a job only what it needs is least privilege, from Saltzer and Schroeder <a href="#ref-8">[8]</a>. Checking a run against a recorded one follows the self-initializing fake <a href="#ref-9">[9]</a>, by analogy: here the recording is of which agents ran, and the model still chooses afresh each time. That a name should fix exactly what is fetched is the principle behind Nix <a href="#ref-10">[10]</a>. The Model Context Protocol <a href="#ref-11">[11]</a> lets a tool list change during a session; here the list is derived from what a past session used. We claim only the combination: the transcript as the source of the working set, loading and release done by an ordinary agent file, and a check on which agents ran as the test of a replay.</p>
 
 <h2>5&nbsp;·&nbsp;Limitations</h2>
 <ul>
-<li><b>Abilities replay; answers from a model do not.</b> The proof's agents are pure, so their answers replay byte for byte. A live model given the same abilities may still answer differently.</li>
-<li><b>Fingerprints prove sameness, not safety.</b> A pinned agent can be pinned and harmful. Where agents come from still needs a trust rule.</li>
-<li><b>Routes match words.</b> Whole-word matching misses other forms of a word; the proof uses plain words only.</li>
-<li><b>Isolation is per folder, inside one process.</b> Conversations get separate folders, but their agents still run in one runtime process with its permissions.</li>
-<li><b>Identity by name and tool name.</b> Two unrelated files with the same name and the same tool name would be treated as versions of one agent.</li>
-<li><b>One estate, one author, runs counted once.</b> The live results above were each run once on one laptop.</li>
+  <li><b>The live records are not public.</b> Only the proof can be rerun by a reader.</li>
+  <li><b>The check sees which agents ran, not whether they ran well.</b> The same agent with worse inputs still matches. Each program measuring its own result covers part of that gap, not all of it.</li>
+  <li><b>False alarms are real.</b> Between about one in seven and one in four first tries missed with nothing wrong, and one retry did not remove them.</li>
+  <li><b>One small model, one device.</b> The live numbers come from one laptop and one small model choosing the agents, with the second scenario run under load. Larger models may miss less; we have not measured that.</li>
+  <li><b>The judges were written by the builder.</b> No one else has reproduced the live numbers.</li>
+  <li><b>Small counts.</b> The largest sample here is 55 lines.</li>
+  <li><b>A fingerprint proves sameness, not safety.</b> A pinned agent can be pinned and harmful. Where agents come from still needs a trust rule.</li>
+  <li><b>Loaded programs share one process.</b> Opening only the working set limits what the model can reach, not what a loaded file can do.</li>
 </ul>
 
 <h2>6&nbsp;·&nbsp;Conclusion</h2>
-<p>Frame Chains made history verifiable. Living Holograms made it steerable. Thought Contracts made the hologram react to what is present. Shared Presents lets the record decide what is present. The conversation names its abilities; loading a turn makes them present and everything else absent; an old turn replays with the abilities it had; and several speakers can share one present, each with its own.</p>
+<p>Frame Chains made history verifiable. Living Holograms made it steerable. Thought Contracts made a runtime react to what is present. Working Sets lets the work itself decide what is present: a chat remembers its agents, a replay opens only those, and comparing what ran, step by step, tells you whether the same steps happened or whether a step needs a second look. The first version of this part used many mechanisms to say that. This version uses one.</p>
 
 <h2>7&nbsp;·&nbsp;References</h2>
 <ol class="refs">
@@ -209,13 +220,14 @@ footer { margin-top: 64px; border-top: 1px solid var(--rule); padding-top: 18px;
   <li id="ref-4">K. Wildfeuer. <a href="https://kody-w.github.io/thought-contracts/paper.html">Thought Contracts</a>. RapterBox LLC, 2026.</li>
   <li id="ref-5">K. Wildfeuer. <a href="https://github.com/kody-w/rapp-1">rapp/1 specification and reference implementation</a>, 2026.</li>
   <li id="ref-6">K. Wildfeuer. <a href="https://github.com/kody-w/RAR">RAR, the RAPP agent registry</a>, 2026.</li>
-  <li id="ref-7">E. Dolstra. The Purely Functional Software Deployment Model. PhD thesis, Utrecht University, 2006.</li>
-  <li id="ref-8">M. Fowler. Event Sourcing, 2005.</li>
-  <li id="ref-9">D. Gelernter. Generative Communication in Linda. <i>ACM TOPLAS</i> 7(1), 1985.</li>
-  <li id="ref-10">Model Context Protocol. Specification, revision 2025-06-18.</li>
+  <li id="ref-7">P. J. Denning. The Working Set Model for Program Behavior. <i>Communications of the ACM</i> 11(5), 1968.</li>
+  <li id="ref-8">J. H. Saltzer and M. D. Schroeder. The Protection of Information in Computer Systems. <i>Proceedings of the IEEE</i> 63(9), 1975.</li>
+  <li id="ref-9">M. Fowler. Self Initializing Fake, 2009.</li>
+  <li id="ref-10">E. Dolstra. The Purely Functional Software Deployment Model. PhD thesis, Utrecht University, 2006.</li>
+  <li id="ref-11">Model Context Protocol. Specification, revision 2025-06-18.</li>
 </ol>
 <footer>
-<p>RAPP paper · shared-presents · part 4 of <a href="https://kody-w.github.io/frame-chains/paper.html">Frame Chains</a> → <a href="https://kody-w.github.io/living-holograms/paper.html">Living Holograms</a> → <a href="https://kody-w.github.io/thought-contracts/paper.html">Thought Contracts</a> → Shared Presents · first public disclosure 2026-11-19 · © 2026 RapterBox LLC · substrate: <a href="https://github.com/kody-w/rapp-1">rapp/1</a></p>
+<p>RAPP paper · working sets · part 4 of <a href="https://kody-w.github.io/frame-chains/paper.html">Frame Chains</a> → <a href="https://kody-w.github.io/living-holograms/paper.html">Living Holograms</a> → <a href="https://kody-w.github.io/thought-contracts/paper.html">Thought Contracts</a> → Working Sets · first public disclosure 2026-11-19 as Shared Presents · rewritten 2026-11-20 · © 2026 RapterBox LLC · substrate: rapp/1</p>
 </footer>
 </main>
 </body>

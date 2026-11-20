@@ -1,54 +1,63 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Shared Presents proof</title>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Working Sets · run the proof</title>
+<meta name="description" content="Run the proof for Working Sets: a saved chat opens only the programs it used, and a check on what ran catches what the words hide.">
 <style>
-:root{--bg:#fcfcfb;--ink:#0b0b0b;--muted:#52514e;--rule:#e3e1dc;--panel:#f3f2ee;--ok:#1baf7a;--bad:#d0453a;--accent:#2a78d6}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1a1a19;--ink:#f0efec;--muted:#c3c2b7;--rule:#34332f;--panel:#232321;--ok:#199e70;--bad:#e5655a;--accent:#3987e5}}
-:root[data-theme="dark"]{--bg:#1a1a19;--ink:#f0efec;--muted:#c3c2b7;--rule:#34332f;--panel:#232321;--ok:#199e70;--bad:#e5655a;--accent:#3987e5}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,sans-serif}
-main{max-width:860px;margin:0 auto;padding:24px 16px 64px}h1{font-size:24px;margin:0 0 4px}p.lede{color:var(--muted);margin:0 0 16px}
-.bar{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}button{font:inherit;padding:8px 12px;border:1px solid var(--rule);background:var(--panel);color:var(--ink);border-radius:6px;cursor:pointer}
-button:focus-visible{outline:2px solid var(--accent)}label{display:flex;gap:8px;align-items:center;flex-wrap:wrap}input[type=range]{width:220px}
-ol{padding:0;list-style:none;margin:0}li{border:1px solid var(--rule);border-radius:8px;padding:10px 12px;margin:8px 0}li.dim{opacity:.35}li.now{border-color:var(--accent)}
-.who{font-weight:600}.agents{font:13px/1.4 ui-monospace,Menlo,monospace;color:var(--muted)}.ans{margin-top:4px}
-.ok{color:var(--ok)}.bad{color:var(--bad)}#status{font-weight:600;margin:8px 0;min-height:1.5em}
-</style></head><body><main>
-<h1>Shared Presents: the proof</h1>
-<p class="lede">One chat, three AI speakers and one person. Each turn names a stack; replaying a turn loads exactly the agents it names, pulls back exactly the data pieces it names, checks every fingerprint with real SHA-256, and answers with only those agents. Nothing leaves this page.</p>
-<div class="bar">
- <label>Replay up to turn <input id="k" type="range" min="0" max="6" value="6"> <b id="kv">6</b></label>
-</div>
-<div class="bar">
- <button id="seal">1. Seal the chat</button><button id="replay">2. Replay and compare</button>
- <button id="upgrade">3. Upgrade Disk Care</button><button id="fork">4. Fork at turn 3</button>
- <button id="tamper">5. Tamper one agent byte</button><button id="tamperdata">6. Tamper one data piece</button><button id="reset">Reset</button>
-</div>
-<p id="status" role="status" aria-live="polite">Press 1 to seal the chat: each turn records the agents it loaded and the hash of its answer.</p>
-<ol id="turns"></ol>
-<script type="module">
-import * as C from "./core.js";
-let cat, st, data, sealed = null, view = C.TRANSCRIPT, note = "";
-const $ = id => document.getElementById(id);
-async function init(){ cat = await C.buildCatalog(); st = await C.stacks(cat); data = await C.buildData(); sealed = null; view = C.TRANSCRIPT; await draw(); }
-async function draw(){
-  const k = +$("k").value; $("kv").textContent = k; $("k").max = view.turns.length - 1;
-  const rows = await C.replayAll(cat, st, view, data);
-  $("turns").innerHTML = rows.map((r, i) => {
-    const s = sealed && sealed.turns[i] && view.turns[i] === view.turns[i] ? sealed.turns[i] : null;
-    const same = s && s.answer_sha256 ? (r.answer_sha256 === s.answer_sha256 ? '<span class="ok"> ✓ same as sealed</span>' : '<span class="bad"> ✗ differs from sealed</span>') : "";
-    const t = view.turns[i];
-    return `<li class="${i > k ? "dim" : i === k ? "now" : ""}"><div><span class="who">${t.speaker}</span> <span class="agents">stack ${t.stack}</span>: ${t.said}${t.pull ? ' <span class="agents">pulls: ' + t.pull.join(', ') + '</span>' : ''}</div>
-      <div class="agents">loaded: ${r.refused ? '<span class="bad">REFUSED, ' + r.refused + '</span>' : (r.agents.join(", ") || "nothing")}</div>
-      ${r.refused ? "" : `<div class="ans">${r.answer || "(no agent, no answer)"}${same}</div>`}</li>`; }).join("");
-  $("status").textContent = note;
+:root{--bg:#f7f4ee;--ink:#1d1b18;--soft:#6b655c;--rule:#d9d2c5;--card:#fffdf8;--ok:#1f6f43;--bad:#a3341f;--accent:#8a4a1c}
+@media (prefers-color-scheme:dark){:root{--bg:#161412;--ink:#ece6da;--soft:#a39b8e;--rule:#3a352e;--card:#1f1c19;--ok:#6fcf97;--bad:#f0907a;--accent:#e0a36b}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 Georgia,"Source Serif 4",serif}
+main{max-width:760px;margin:0 auto;padding:20px 16px 60px}a{color:var(--accent)}
+h1{font-size:28px;margin:8px 0 4px}p.lead{color:var(--soft);margin:0 0 18px}
+.steps{display:grid;gap:8px;margin:14px 0}button{font:600 16px/1.2 system-ui,sans-serif;padding:13px 14px;border-radius:10px;border:1px solid var(--rule);background:var(--card);color:var(--ink);text-align:left;cursor:pointer}
+button.on{border-color:var(--accent);box-shadow:inset 4px 0 0 var(--accent)}button small{display:block;font-weight:400;color:var(--soft);margin-top:3px}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:14px;margin:12px 0}
+.label{font:600 12px/1 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{font:500 14px/1 system-ui,sans-serif;padding:7px 10px;border-radius:999px;border:1px solid var(--rule);color:var(--soft)}
+.chip.open{border-color:var(--ok);color:var(--ok);font-weight:700}
+.turn{padding:9px 0;border-top:1px solid var(--rule)}.turn:first-child{border-top:0}.asked{font-weight:600}.said{color:var(--soft)}
+.ran{font:600 13px/1 system-ui,sans-serif;margin-top:4px}.ran.same{color:var(--ok)}.ran.diff{color:var(--bad)}
+.verdict{font:700 18px/1.3 system-ui,sans-serif}.verdict.ok{color:var(--ok)}.verdict.bad{color:var(--bad)}.verdict+p{margin:6px 0 0;color:var(--soft)}
+</style>
+</head>
+<body>
+<main>
+<p><a href="../paper.html">← Working Sets, the paper</a></p>
+<h1>Run the proof</h1>
+<p class="lead">A job was done once by chat: teach a fact, ask about it, make a quote. That chat was saved with the programs it used. Pick what happens when it is run again.</p>
+<div class="steps" id="steps"></div>
+<div class="card"><div class="label">On the shelf · open now in green</div><div class="chips" id="shelf"></div></div>
+<div class="card"><div class="label">The same three requests, run again</div><div id="turns"></div></div>
+<div class="card"><div class="label">The check: did the same programs run?</div><div id="verdict"></div></div>
+<p class="lead">The chooser on this page is a fixed stand-in for a model, so the page repeats exactly. The same engine runs in the repository's check, 22 of 22.</p>
+</main>
+<script src="core.js"></script>
+<script>
+const set = ["Quote", "Recall", "Remember"], saved = WS.run(WS.LESSON, set);
+const CASES = [
+  { key: "set", name: "Open only what the saved chat used", note: "Three programs out of six.", open: set, lines: WS.LESSON },
+  { key: "all", name: "Open everything on the shelf", note: "Two look-alikes are now in reach.", open: WS.everything(), lines: WS.LESSON },
+  { key: "short", name: "Leave one detail out of the request", note: "The quote is asked for with no amount.", open: set, lines: [WS.LESSON[0], WS.LESSON[1], "Give me a price quote for widgets for an order."] },
+  { key: "lie", name: "The reply says it saved, and nothing ran", note: "Seen in live runs. The words look fine.", open: set, lines: WS.LESSON, opts: { saysButDoesNot: "Remember" } },
+  { key: "none", name: "With nothing open", note: "What the runtime says before any program is opened.", open: [], lines: WS.LESSON },
+];
+const $ = id => document.getElementById(id), esc = s => s.replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+function show(c) {
+  const now = WS.run(c.lines, c.open, c.opts), r = WS.compare(saved, now);
+  $("steps").innerHTML = CASES.map(x => `<button data-k="${x.key}" class="${x.key === c.key ? "on" : ""}">${x.name}<small>${x.note}</small></button>`).join("");
+  $("shelf").innerHTML = WS.everything().map(n => `<span class="chip ${c.open.includes(n) ? "open" : ""}">${n}</span>`).join("");
+  $("turns").innerHTML = now.turns.map((t, i) => { const same = t.ran.join() === saved.turns[i].ran.join();
+    return `<div class="turn"><div class="asked">${esc(t.asked)}</div><div class="said">${esc(t.said)}</div><div class="ran ${same ? "same" : "diff"}">${t.ran.length ? "ran " + t.ran.join(", ") : "nothing ran"}${same ? "" : " · before: " + saved.turns[i].ran.join(", ")}</div></div>`; }).join("");
+  if (!c.open.length) { $("verdict").innerHTML = `<div class="verdict" id="result">Nothing is open</div><p>Each request is turned down in plain words. That is the cue to open what the job needs.</p>`; document.body.dataset.case = c.key; document.body.dataset.matches = "closed"; return; }
+  const why = r.stepsDiffer.map(d => `Step ${d.step} ran ${d.before} before and ${d.now} now.`).join(" ");
+  $("verdict").innerHTML = r.matches ? `<div class="verdict ok" id="result">The same steps ran</div><p>Each request ran the program it ran before. The run followed the recorded path. That does not prove the results are right.</p>`
+    : `<div class="verdict bad" id="result">Does not match</div><p>${why} Look at that step before trusting this run: say the request once more and, if it still does not run, ask the person about that step.</p>`;
+  document.body.dataset.case = c.key; document.body.dataset.matches = r.matches;
 }
-$("k").oninput = draw;
-$("seal").onclick = async () => { sealed = await C.seal(cat, st, view, data); note = "Sealed: 7 turns, each with its agents and answer hash."; draw(); };
-$("replay").onclick = async () => { if(!sealed){note="Seal first.";return draw();} const r = await C.replayAll(cat, st, sealed, data); const n = r.filter((x,i)=>x.answer_sha256===sealed.turns[i].answer_sha256).length; note = `Replayed: ${n} of ${r.length} turns byte-identical to the seal.`; draw(); };
-$("upgrade").onclick = async () => { st = { ...st, care: st["care-v2"] }; note = "Disk Care v2 is now in the care stack. This page resolves stacks by name, so the 4 Disk Care turns now answer differently from the seal: that is what an upgrade does to a chat that did not pin versions. A chat that pins versions replays v1 unchanged (the Node check proves it)."; draw(); };
-$("fork").onclick = async () => { if(!sealed){note="Seal first.";return draw();} const p = await C.sha256(C.canon(sealed)); view = C.fork(sealed, 3, p, [{speaker:"Kody",stack:"hub",said:"check disk space instead"}]); note = `Forked at turn 3; parent ${p.slice(0,12)}. Turns 0 to 3 match the seal; turn 4 is a new branch.`; $("k").value = view.turns.length-1; draw(); };
-$("tamper").onclick = async () => { const h = Object.keys(cat).find(x => cat[x].name === "browser_agent.py"); cat = { ...cat, [h]: { ...cat[h], src: cat[h].src + " " } }; note = "One space added to the Browser agent's source. Turns that name it are refused whole; every other turn still replays."; draw(); };
-$("tamperdata").onclick = async () => { const h = Object.keys(data).find(x => data[x].name === "late-orders"); data = { ...data, [h]: { ...data[h], text: data[h].text + "!" } }; note = "One character added to the late-orders piece that turn 4 pulls back. That turn is refused whole; the other 6 still replay."; draw(); };
-$("reset").onclick = () => { note = "Reset."; init(); };
-init();
-</script></main></body></html>
+$("steps").addEventListener("click", e => { const b = e.target.closest("button"); if (b) show(CASES.find(x => x.key === b.dataset.k)); });
+show(CASES[0]);
+</script>
+</body>
+</html>

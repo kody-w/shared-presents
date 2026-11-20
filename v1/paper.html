@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shared Presents</title>
+<meta name="description" content="RAPP paper, part 4. A saved conversation names, turn by turn, the exact agent files it ran with, so it can be replayed, forked, moved between surfaces and shared by several speakers.">
+<link rel="canonical" href="https://kody-w.github.io/shared-presents/v1/paper.html">
+<meta property="og:title" content="Shared Presents · RAPP paper, part 4">
+<meta property="og:description" content="One transcript, many holograms, and abilities named by the record.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<script>
+  (() => {
+    const param = new URLSearchParams(window.location.search).get("scoutTheme");
+    const theme =
+      param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>
+<style>
+/* One reading column, a lab report. */
+:root {
+  --bg: #fcfcfb; --ink: #0b0b0b; --muted: #52514e; --rule: #e3e1dc; --panel: #f3f2ee;
+  --cp: #1baf7a; --accent: #2a78d6; --line-strong: #9a988f;
+  --display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1a1a19; --ink: #f0efec; --muted: #c3c2b7; --rule: #34332f; --panel: #232321;
+    --cp: #199e70; --accent: #3987e5; --line-strong: #6f6d66; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1a1a19; --ink: #f0efec; --muted: #c3c2b7; --rule: #34332f; --panel: #232321;
+  --cp: #199e70; --accent: #3987e5; --line-strong: #6f6d66; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 18px/1.6 var(--body); }
+main { max-width: 760px; margin: 0 auto; padding-inline: 20px; padding-block: 40px 96px; }
+.series { display: flex; flex-wrap: wrap; gap: 6px 18px; font: 500 14px/1.4 var(--display); margin: 0 0 28px; }
+header { border-bottom: 2px solid var(--ink); padding-bottom: 28px; margin-bottom: 30px; }
+.kicker { font: 600 13px/1.4 var(--display); letter-spacing: .09em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+h1 { font: 700 clamp(44px, 9vw, 76px)/0.98 var(--display); letter-spacing: -0.01em; margin: 0 0 16px; text-wrap: balance; }
+.dek { font-size: 21px; line-height: 1.45; color: var(--muted); margin: 0 0 16px; max-width: 34em; }
+.meta { font: 500 14px/1.4 var(--display); color: var(--muted); margin: 0 0 6px; }
+.subtitle { font: 600 clamp(24px, 4.4vw, 34px)/1.15 var(--display); margin: 0 0 16px; text-wrap: balance; }
+.summary { font-size: 19px; line-height: 1.5; margin: 0 0 26px; }
+h2 { font: 600 28px/1.15 var(--display); margin: 56px 0 12px; text-wrap: balance; }
+h3 { font: 600 19px/1.3 var(--display); margin: 28px 0 6px; letter-spacing: .01em; }
+p, li { max-width: 40em; }
+ul, ol { padding-left: 1.2em; }
+li { margin: 6px 0; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+b, strong { font-weight: 600; }
+code { font: 0.86em var(--mono); background: var(--panel); padding: 1px 5px; border-radius: 4px; }
+.short { background: var(--panel); border-left: 4px solid var(--accent); padding: 18px 22px 10px; margin: 0 0 8px; }
+.short h2 { margin-top: 0; font-size: 20px; }
+.claim { background: var(--panel); border-left: 4px solid var(--line-strong); padding: 14px 20px; margin: 22px 0; font-size: 16px; }
+figure { margin: 26px 0 30px; }
+figcaption { font: 500 14px/1.45 var(--display); color: var(--muted); margin-top: 8px; letter-spacing: .01em; }
+.tw { overflow-x: auto; margin: 18px 0 26px; }
+table { border-collapse: collapse; width: 100%; font: 15px/1.4 var(--display); }
+th { text-align: left; font-weight: 600; color: var(--muted); border-bottom: 1.5px solid var(--ink); padding: 8px 10px 6px 0; vertical-align: bottom; }
+td { border-bottom: 1px solid var(--rule); padding: 7px 10px 7px 0; vertical-align: top; }
+blockquote { margin: 18px 0; padding: 4px 0 4px 18px; border-left: 3px solid var(--accent); font-style: italic; }
+code.seal { display: inline-block; max-width: 100%; overflow-wrap: anywhere; word-break: break-all; margin: 4px 0; }
+.refs { font-size: 15px; line-height: 1.5; }
+footer { margin-top: 64px; border-top: 1px solid var(--rule); padding-top: 18px; font: 14px/1.5 var(--display); color: var(--muted); }
+.stage { position: relative; width: 100%; aspect-ratio: 16/7; border: 1px solid var(--rule); border-radius: 6px; background: var(--panel); overflow: hidden; }
+.stage[data-scene="mcp"] { aspect-ratio: 16/8; }
+.stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.stage .lbl { position: absolute; transform: translate(-50%, -50%); font: 600 13px/1.2 var(--display); color: var(--muted); white-space: nowrap; pointer-events: none; letter-spacing: .01em; }
+.stage .lbl.start { transform: translate(0, -50%); }
+.stage .fallback { position: absolute; inset: 0; margin: 0; display: flex; align-items: center; justify-content: center; padding: 16px 22px; text-align: center; color: var(--muted); font: 15px/1.5 var(--display); }
+.stage.live .fallback { display: none; }
+@media (max-width: 640px) {
+  .stage { aspect-ratio: 16/9; }
+  .stage[data-scene="mcp"] { aspect-ratio: 3/5; }
+  .stage .lbl { font-size: 12px; }
+}
+@media (max-width: 520px) { body { font-size: 17px; } .dek { font-size: 19px; } .summary { font-size: 18px; } }
+@media print { .series { display: none; } .stage canvas, .stage .lbl { display: none; } .stage.live .fallback { display: flex; } figure, .claim { break-inside: avoid; } }
+</style>
+<style>table{border-collapse:collapse;width:100%;font-size:16px}th,td{border-bottom:1px solid var(--rule);padding:6px 8px;text-align:left;vertical-align:top}code{font-family:var(--mono);font-size:.9em}</style>
+</head>
+<body>
+<main>
+<p class="meta" style="border:1px solid var(--rule);padding:10px 12px;border-radius:8px">This is the first version, as published on 2026-11-19. It was rewritten on 2026-11-20 as <a href="../paper.html">Working Sets</a>.</p>
+<nav class="series" aria-label="Series">
+  <a href="https://kody-w.github.io/frame-chains/paper.html">Part 1: Frame Chains</a>
+  <a href="https://kody-w.github.io/living-holograms/paper.html">Part 2: Living Holograms</a>
+  <a href="https://kody-w.github.io/thought-contracts/paper.html">Part 3: Thought Contracts</a>
+  <a href="play/replay.html">Run the proof</a>
+  <a href="https://github.com/kody-w/shared-presents">Source</a>
+</nav>
+<header>
+  <p class="kicker">RAPP paper · part 4 · November 2026</p>
+  <h1>Shared Presents</h1>
+  <p class="subtitle">One transcript, many holograms, and abilities named by the record</p>
+  <p class="dek">A saved conversation names, turn by turn, exactly which agent files were loaded. Any surface can load the same file and stand where that conversation stood: replay it, fork it, or let several AI speakers share it, each answering with only its own abilities.</p>
+  <p class="meta">Part 4 of Frame Chains → Living Holograms → Thought Contracts → Shared Presents.</p>
+  <p class="meta">Kody Wildfeuer · RapterBox LLC · First public disclosure: 2026-11-19</p>
+</header>
+
+<p class="summary"><b>In one sentence:</b> when each turn of a saved conversation names the exact, fingerprinted agent files it ran with, the conversation itself becomes the hologram's shape at every moment, so it can be replayed byte for byte, forked from any turn, moved between surfaces with nothing changed, and shared by several speakers who load and unload their own abilities as their turn comes.</p>
+
+<section class="short">
+  <h2>The short version</h2>
+  <ul>
+    <li><b>The record names the abilities.</b> Thought Contracts showed that what is in the agents folder is what the hologram can do. Here the conversation decides what is in the folder: each turn carries a list of agent fingerprints, and loading that turn makes the folder hold exactly those files.</li>
+    <li><b>Unloading is free.</b> Anything the next turn does not name is gone for that turn. Presence is ability, and the record now governs presence.</li>
+    <li><b>Stacks.</b> A stack is a named list of exact agent versions plus static routes. Words in the last few turns pick child stacks the same way every time. The same stack and the same words load the same agents.</li>
+    <li><b>Time travel.</b> Because every version is kept by fingerprint, turn 7 of an old conversation can be replayed with the agents of that moment, not today's. A fork from any turn names its parent.</li>
+    <li><b>A shared present.</b> Several speakers in one transcript, each turn naming its speaker's stack: one runtime, one file, and the hotload mechanic is the whole engine. This answers the question Part 3 ended on.</li>
+    <li><b>The agent file stays sacred.</b> A stack may optionally travel as one ordinary agent file that unpacks its members after checking each fingerprint.</li>
+  </ul>
+</section>
+
+<h2>1&nbsp;·&nbsp;Where the series left off</h2>
+<p>Frame Chains <a href="#ref-1">[1]</a> made the history of an estate verifiable without trusting a clock. Verified Frame Worlds <a href="#ref-2">[2]</a> made an application's visible state a replay of its record, with forks that name their parent frame. Living Holograms <a href="#ref-3">[3]</a> made that history steerable through lenses: agent files whose identity is the hash of their source, so editing one description makes a new lens. Thought Contracts <a href="#ref-4">[4]</a> showed that a hologram's abilities are plain files read fresh on every turn: a file arrives and the next turn can do more; a file leaves and the ability goes. It closed with a question: what happens when two holograms share one present?</p>
+<p>Two gaps remained in practice. First, which files were present at a given turn was a fact about one machine's folder, not about the conversation. Move the conversation to another machine, or come back next month, and the folder holds something else. Second, a hologram with thousands of possible abilities cannot show them all to a model at once, and choosing a subset by hand does not repeat.</p>
+<p>This paper closes both with one move: the conversation names its abilities.</p>
+
+<h2>2&nbsp;·&nbsp;Design</h2>
+<h3>2.1 Three words</h3>
+<p>The design uses three nouns, each mapped to one that already exists in RAPP:</p>
+<table>
+<tr><th>Word</th><th>What it is</th></tr>
+<tr><td>Agent</td><td>One <code>agent.py</code> file: one tool, a description, described parameters and a <code>perform()</code>. Its identity is its file name plus the tool name it registers; each version is kept by its SHA-256.</td></tr>
+<tr><td>Stack</td><td>A named folder of references, never copies: exact agent versions by fingerprint, child stacks, and static routes. It has a stable identifier.</td></tr>
+<tr><td>Skill</td><td>A <code>skill.md</code> page an AI reads and carries out, which names the stack it needs. An agent file is never called a skill.</td></tr>
+</table>
+
+<h3>2.2 A catalog by fingerprint</h3>
+<p>Every agent version an estate has ever run is kept once, under its fingerprint, in a local catalog. Nothing is overwritten; a new version is a new entry beside the old one. This is the rule Git applies to file contents and Nix to packages: you cannot replay yesterday with today's code.</p>
+
+<h3>2.3 The record names the folder</h3>
+<p>The chat file that the Brainstem already exports gains one field per turn: the list of agent fingerprints that turn ran with, and the stack it came from. Loading a turn means: resolve the stack, fetch each named file from the catalog, re-hash it, and make the folder hold exactly those files. If any file is missing or its hash differs, the turn is refused whole. A turn is never half-loaded. An older chat file without the field loads as it always did.</p>
+
+<h3>2.4 Static routes</h3>
+<p>A stack may carry routes: a list of words and the child stack each one selects. The words of the last four turns, lowercased and split into whole words, are matched against them. The rule is deterministic, so the same stack and the same conversation choose the same agents on every machine. One stack identifier can therefore take many shapes, chosen by what is being talked about, while every shape remains reproducible. The model sees only the handful of agents a turn routes to, never the whole catalog.</p>
+
+<h3>2.5 Time travel and forks</h3>
+<p>Replaying turn <i>k</i> loads what turn <i>k</i> named. An upgrade to an agent changes the answers of new conversations and leaves pinned old ones untouched. A fork copies turns 0 to <i>k</i>, records the parent conversation's hash and the turn it left from, and continues; its shared prefix replays byte for byte. This is Verified Frame Worlds' prefix rule applied to abilities rather than to board state.</p>
+
+<h3>2.6 A shared present</h3>
+<p>A group conversation is one transcript in which each turn names a speaker and that speaker's stack. Before a speaker answers, its stack is loaded; when the next speaker's turn comes, that set is unloaded and the next one loaded. Every speaker reads the whole transcript as its present, and answers with only its own abilities. No new runtime is needed: one Brainstem and one file carry the whole group, and each turn records who spoke with which agents.</p>
+<p>In Thought Contracts' terms, the transcript is the shared structure that writers and readers meet in. Several holograms share it, and none calls another.</p>
+
+<h3>2.7 The record names its data too</h3>
+<p>Abilities are half of a present. The other half is what the caller is shown. Large material (tables, full call quotes, long lists) is kept beside the transcript by fingerprint, as agents are, and never pasted into it. Each turn names the pieces it pulls back, so the next caller sees exactly what that turn pulled and nothing else; a piece no turn names is absent. A pulled piece whose bytes no longer match its fingerprint refuses that turn whole, exactly as a changed agent does. With both halves named, replaying a turn gives the caller the same tools and the same facts, and the transcript stays small because both ride by reference. This is Living Holograms' data sloshing, with the carried material addressed rather than retold.</p>
+
+<h3>2.8 One file when it must travel</h3>
+<p>A stack can optionally be exported as a single ordinary agent file, in the shape of the factory agents already published in RAR <a href="#ref-6">[6]</a>. It carries its members with their fingerprints and, when asked to install, checks each one before writing it beside itself; if a different file of the same name is already there, it keeps the owner's file and says so. The single agent file remains the one unit everything ships as.</p>
+
+<h3>2.9 At scale: any runtime can answer any turn</h3>
+<p>Because a turn's manifest (agent fingerprints, data fingerprints and the transcript) is everything needed to answer it, and the runtime keeps nothing between requests, the pattern scales the way per-request functions, fingerprinted stores and content delivery networks do <a href="#ref-7">[7]</a>. This section is design; it has not yet been run on more than one runtime at once.</p>
+<ul>
+<li><b>Runtimes become interchangeable.</b> No conversation sticks to one machine. Add machines and spread turns over them; if one dies, the next turn goes elsewhere with nothing lost.</li>
+<li><b>Caching is trivial.</b> A fingerprinted file never changes, so every node may keep it forever and never check for updates; the only question is what to evict. The catalog can be a plain static site serving any number of nodes.</li>
+<li><b>Send turns to warm nodes.</b> A turn goes to a node that already holds its stack, so popular stacks stay loaded and rare ones load once.</li>
+<li><b>The catalog can be any size.</b> Each turn pays only for the handful of agents and pieces it names; a million unnamed agents cost nothing.</li>
+<li><b>Upgrades never break running work.</b> A new version is a new fingerprint. Old manifests keep the old one, so a rollout changes what new turns name, and a rollback does the same.</li>
+<li><b>The kernel stays untouched.</b> All of it sits beside the runtime and speaks to it through its ordinary chat endpoint.</li>
+</ul>
+<p>What breaks first is known from those predecessors: the first turn for a stack waits for its files; agents from many conversations share one process and its permissions; a fingerprint proves sameness, not safety; and the model call, not loading, dominates cost.</p>
+
+<h2>3&nbsp;·&nbsp;Reduction to practice</h2>
+<p><b>The proof.</b> <a href="play/replay.html">One self-contained page</a> holds a seven-turn conversation between a person and three AI speakers, five agent versions and five stacks, with real SHA-256 from the browser. Seal records each turn's agents and answer hash. Replay compares. Upgrade, fork and tamper show what each does. A dependency-free Node check, <code>node scripts/check.mjs</code>, runs the same core and passed 14 of 14 on 2026-11-19:</p>
+<ul>
+<li>every turn replays to its sealed answer, 7 of 7;</li>
+<li>each turn loads exactly the agents it names, routed by the last four turns;</li>
+<li>the speaker on turn 4 holds only its own agent, and the agents of turns 0 to 3 are gone;</li>
+<li>an upgrade changes the answer for a new conversation, while the old one, replayed with what it named, is unchanged;</li>
+<li>a fork at turn 3 keeps turns 0 to 3 byte-identical and names its parent;</li>
+<li>one byte added to one agent refuses every turn that names it, and leaves the other turns replaying;</li>
+<li>a turn that pulls a data piece by fingerprint replays with it, and one character added to that piece refuses that turn only, while the other 6 replay. Removing the piece check turns this red.</li>
+</ul>
+<p>Driven headlessly at phone width, the page gave 7 of 7 on replay, refused the 3 turns that name the tampered agent, and showed no errors.</p>
+<p><b>On a live estate.</b> On the author's laptop, a local catalog holds 155 agent identities with every version by fingerprint. Saved chat files with the agents field load the agents they name and unload the rest; three of three saved chats loaded their named sets after the catalog was re-keyed. A stack tree, routes (five of five test sentences), and the single-file export (four of four members byte-identical to the catalog) each ran once.</p>
+<p><b>Per-chat folders and a live group conversation (added later on 2026-11-19).</b> On the author's own runtime, each conversation now loads into its own folder; three conversations asked at the same moment each listed only their own agents (3 of 3). A live group conversation with a person and three AI speakers ran once: each speaker loaded only its own stack, two called their own tools, and the third, which held only a browser agent, said it could not check disk space (3 of 3). In a second live run, one speaker pulled a data piece by fingerprint and answered with a code that existed only in that piece; a speaker that had not pulled it repeated it from the shared transcript; with one byte of the piece changed, the pulling turn was refused (1 of 1 each).</p>
+<p><b>What does not exist yet.</b> Replay against a live model is not byte-identical, because the model is not; what replays exactly is which abilities and data it had. Other machines do not yet pull from the catalog by fingerprint.</p>
+
+<h2>4&nbsp;·&nbsp;Related work</h2>
+<p>Each part has an ancestor. Content-addressed storage with immutable history is Git's; whole-system pinning and rollback by hash is Nix's <a href="#ref-7">[7]</a>; replay of state from a log is event sourcing <a href="#ref-8">[8]</a>. Routing tables pick handlers by fixed rules, as request routers and Unix shells do. Package lockfiles record exact versions so a build repeats. Blackboard and tuple-space systems let independent agents share one structure without calling each other <a href="#ref-9">[9]</a>. The Model Context Protocol <a href="#ref-10">[10]</a> lets a tool list change during a session; here the list is a property of the record instead. We claim only the combination: a conversation whose turns name fingerprinted abilities, resolved by static routes, so that it replays, forks, travels and is shared.</p>
+
+<h2>5&nbsp;·&nbsp;Limitations</h2>
+<ul>
+<li><b>Abilities replay; answers from a model do not.</b> The proof's agents are pure, so their answers replay byte for byte. A live model given the same abilities may still answer differently.</li>
+<li><b>Fingerprints prove sameness, not safety.</b> A pinned agent can be pinned and harmful. Where agents come from still needs a trust rule.</li>
+<li><b>Routes match words.</b> Whole-word matching misses other forms of a word; the proof uses plain words only.</li>
+<li><b>Isolation is per folder, inside one process.</b> Conversations get separate folders, but their agents still run in one runtime process with its permissions.</li>
+<li><b>Identity by name and tool name.</b> Two unrelated files with the same name and the same tool name would be treated as versions of one agent.</li>
+<li><b>One estate, one author, runs counted once.</b> The live results above were each run once on one laptop.</li>
+</ul>
+
+<h2>6&nbsp;·&nbsp;Conclusion</h2>
+<p>Frame Chains made history verifiable. Living Holograms made it steerable. Thought Contracts made the hologram react to what is present. Shared Presents lets the record decide what is present. The conversation names its abilities; loading a turn makes them present and everything else absent; an old turn replays with the abilities it had; and several speakers can share one present, each with its own.</p>
+
+<h2>7&nbsp;·&nbsp;References</h2>
+<ol class="refs">
+  <li id="ref-1">K. Wildfeuer. <a href="https://kody-w.github.io/frame-chains/paper.html">Frame Chains</a>. RapterBox LLC, 2026.</li>
+  <li id="ref-2">K. Wildfeuer. <a href="https://kody-w.github.io/verified-frame-worlds/paper.html">Verified Frame Worlds</a>. RapterBox LLC, 2026.</li>
+  <li id="ref-3">K. Wildfeuer. <a href="https://kody-w.github.io/living-holograms/paper.html">Living Holograms</a>. RapterBox LLC, 2026.</li>
+  <li id="ref-4">K. Wildfeuer. <a href="https://kody-w.github.io/thought-contracts/paper.html">Thought Contracts</a>. RapterBox LLC, 2026.</li>
+  <li id="ref-5">K. Wildfeuer. <a href="https://github.com/kody-w/rapp-1">rapp/1 specification and reference implementation</a>, 2026.</li>
+  <li id="ref-6">K. Wildfeuer. <a href="https://github.com/kody-w/RAR">RAR, the RAPP agent registry</a>, 2026.</li>
+  <li id="ref-7">E. Dolstra. The Purely Functional Software Deployment Model. PhD thesis, Utrecht University, 2006.</li>
+  <li id="ref-8">M. Fowler. Event Sourcing, 2005.</li>
+  <li id="ref-9">D. Gelernter. Generative Communication in Linda. <i>ACM TOPLAS</i> 7(1), 1985.</li>
+  <li id="ref-10">Model Context Protocol. Specification, revision 2025-06-18.</li>
+</ol>
+<footer>
+<p>RAPP paper · shared-presents · part 4 of <a href="https://kody-w.github.io/frame-chains/paper.html">Frame Chains</a> → <a href="https://kody-w.github.io/living-holograms/paper.html">Living Holograms</a> → <a href="https://kody-w.github.io/thought-contracts/paper.html">Thought Contracts</a> → Shared Presents · first public disclosure 2026-11-19 · © 2026 RapterBox LLC · substrate: <a href="https://github.com/kody-w/rapp-1">rapp/1</a></p>
+</footer>
+</main>
+</body>
+</html>
